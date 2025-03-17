@@ -1,0 +1,23 @@
+name: Backup to GitHub
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # יריץ כל יום ב-03:00 בלילה
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create backup
+      run: |
+        zip -r backup-$(date +%Y-%m-%d).zip ./
+
+    - name: Upload backup
+      uses: actions/upload-artifact@v2
+      with:
+        name: repository-backup
+        path: backup-$(date +%Y-%m-%d).zip
